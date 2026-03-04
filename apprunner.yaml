@@ -1,0 +1,11 @@
+version: 1.0
+runtime: buildpack-node
+build:
+  commands:
+    build:
+      - npm install
+      - npm install -g @cyanheads/pubmed-mcp-server supergateway
+run:
+  command: supergateway --port 8080 --stdio "npx -y @cyanheads/pubmed-mcp-server"
+  network:
+    port: 8080
