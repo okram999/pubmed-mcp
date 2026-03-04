@@ -3,8 +3,10 @@ runtime: nodejs22
 build:
   commands:
     build:
-      - npm install -g @cyanheads/pubmed-mcp-server supergateway
+      # Install locally in the project folder (node_modules)
+      - npm install @cyanheads/pubmed-mcp-server supergateway
 run:
-  command: supergateway --port 8080 --stdio "npx -y @cyanheads/pubmed-mcp-server"
+  # Use the direct path to the local binary
+  command: ./node_modules/.bin/supergateway --port 8080 --stdio "npx -y @cyanheads/pubmed-mcp-server"
   network:
     port: 8080
