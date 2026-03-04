@@ -1,9 +1,16 @@
-FROM node:20-slim
+FROM node:20-bookworm
+
+# Install basic tools needed for npx and supergateway
+RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
-# Install the pubmed server and supergateway
-RUN npm install -g @cyanheads/pubmed-mcp-server supergateway
-# Expose the port App Runner will use (default 8080)
+
+# Install the server and bridge locally to avoid global path issues
+RUN npm install @cyanheads/pubmed-mcp-server supergateway
+
+# App Runner default port
 EXPOSE 8080
-# Run supergateway to convert stdio to SSE on port 8080
-CMD ["supergateway", "--port", "8080", "--stdio", "npx @cyanheads/pubmed-mcp-server"]
+
+# Use the local path to supergateway and npx
+CMD ["./node_modules/.bin/supergateway", "--port", "8080", "--stdio", "npx -y @cyanheads/pubmed-mcp-server"]
 
